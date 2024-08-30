@@ -1,0 +1,21 @@
+.game {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 0 20px var(--border-100);
+
+    &-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid var(--border);
+        cursor: pointer;
+        font-size: 60px;
+      }
+  }
+  
+  

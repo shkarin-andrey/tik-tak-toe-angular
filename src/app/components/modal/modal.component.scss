@@ -1,0 +1,27 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+
+    &-content {
+        margin: auto;
+        background: #1d1d1d;
+        padding: 2rem;
+        border-radius: 1rem;
+        color: white;
+    }
+
+    &-title {
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    &-description {
+        font-size: 1.6rem;
+        text-align: center;
+    }
+}

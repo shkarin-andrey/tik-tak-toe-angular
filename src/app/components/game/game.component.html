@@ -1,0 +1,6 @@
+<div class="game">
+    <div *ngFor="let game of gameList; let trackBy = index" class="game-item" (click)="this.GameService.updatePersonItem(trackBy)">
+        {{ game }}
+    </div>
+</div>
+
