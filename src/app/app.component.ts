@@ -1,23 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { GameComponent } from './components/game';
 import { ModalComponent } from './components/modal';
 import { GameService } from './services/game';
+import { GameStatusType } from './types';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ GameComponent, ModalComponent],
-providers: [GameComponent],
+  imports: [GameComponent, ModalComponent],
+  providers: [GameComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  constructor(readonly GameService: GameService) {}
+  readonly #gameService = inject(GameService);
 
-  get gameStatus() {
-    return this.GameService.gameStatus
+  get gameStatus(): GameStatusType | null {
+    return this.#gameService.gameInfo?.status ?? null;
   }
-  
-  readonly title = 'Крестики нолики';
 
+  readonly title: string = 'Крестики нолики';
 }

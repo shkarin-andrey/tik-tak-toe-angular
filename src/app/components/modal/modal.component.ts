@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { GameService } from '../../services/game';
+import { GameStatusType } from '../../types';
 import { ButtonComponent } from '../button';
 
 @Component({
@@ -7,24 +8,24 @@ import { ButtonComponent } from '../button';
   standalone: true,
   imports: [ButtonComponent],
   templateUrl: './modal.component.html',
-  styleUrl: './modal.component.scss'
+  styleUrl: './modal.component.scss',
 })
 export class ModalComponent {
-  constructor(readonly GameService: GameService) {}
+  readonly #gameService = inject(GameService);
 
-  get title() {
-    return this.GameService.title
+  get $title(): string {
+    return this.#gameService.gameInfo?.title ?? '';
   }
 
-  get text() {
-    return this.GameService.text
+  get $description(): string {
+    return this.#gameService.gameInfo?.description ?? '';
   }
 
-  get gameStatus() {
-    return this.GameService.gameStatus
+  get $gameStatus(): GameStatusType | null {
+    return this.#gameService.gameInfo?.status ?? null;
   }
 
-  close() {
-    this.GameService.reset()
+  close(): void {
+    this.#gameService.reset();
   }
 }
