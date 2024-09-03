@@ -1,100 +1,80 @@
 import { Injectable } from '@angular/core';
-import { GameStatusType } from '../../types';
+import { DEFAULT_GAME_FIELDS, GAME_INFO, WIN_ARRAY } from '../../constants';
+import { OptionMovie } from '../../enums';
+import { GameInfoType } from '../../types';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GameService {
-  constructor() {}
+  public gameField: (OptionMovie | null)[] = [...DEFAULT_GAME_FIELDS];
+  public gameInfo: GameInfoType | null = null;
+  private winResultCircle = JSON.stringify(Array(3).fill(OptionMovie.CIRCLE));
+  private winResultCross = JSON.stringify(Array(3).fill(OptionMovie.CROSS));
 
-  public gameList = Array(9).fill(null);
-  public gameStatus: GameStatusType | null = null
-  public text = ''
-  public title = ''
-
-
-  private PARAMS = {
-    circle: "♺",
-    cross: "✘",
-  };
-
-  private win = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-
-  reset = () => {
-    this.gameList = Array(9).fill(null);
-    this.gameStatus = null
-    this.text = '1'
-    this.title = '2'
+  public reset(): void {
+    this.gameField = [...DEFAULT_GAME_FIELDS];
+    this.gameInfo = null;
   }
 
-  public updatePersonItem(index: number) {
-    const currentGame = this.gameList[index];
-
-    if (currentGame === this.PARAMS.circle || currentGame === this.PARAMS.cross)  return 
-      this.gameList.splice(index, 1, this.PARAMS.cross);
-      this.#isWin();
-
-    this.#updateComputerItem()
-  };
-
-  #updateComputerItem() {
-    if (!!this.gameStatus) return 
-    const random = Math.ceil(Math.random() * (this.gameList.length - 1));
-    const gameRandom: string = this.gameList[random]
+  public updatePersonItem(index: number): void {
+    const currentGamePoint = this.gameField[index];
 
     if (
-      gameRandom === this.PARAMS.circle ||
-      gameRandom === this.PARAMS.cross
+      currentGamePoint === OptionMovie.CIRCLE ||
+      currentGamePoint === OptionMovie.CROSS
     ) {
+      return;
+    }
+
+    this.gameField.splice(index, 1, OptionMovie.CROSS);
+    this.#checkGameStatus();
+    this.#updateComputerItem();
+  }
+
+  #updateComputerItem(): void {
+    if (this.gameInfo) return;
+
+    const gameFieldLength: number = this.gameField.length - 1;
+    const random: number = Math.ceil(Math.random() * gameFieldLength);
+    const gameRandom: string | null = this.gameField[random];
+
+    if (gameRandom === OptionMovie.CIRCLE || gameRandom === OptionMovie.CROSS) {
       this.#updateComputerItem();
     } else {
-      this.gameList.splice(random, 1, this.PARAMS.circle);
-      this.#isWin();
+      this.gameField.splice(random, 1, OptionMovie.CIRCLE);
+      this.#checkGameStatus();
     }
-  };
+  }
 
-   #isWin() {
-    this.win.forEach((x:number[]) => {
-      const testGridGame = JSON.stringify([
-        this.gameList[x[0]],
-        this.gameList[x[1]],
-        this.gameList[x[2]],
-      ]);
-      const testResultCircle = JSON.stringify(Array(3).fill(this.PARAMS.circle));
-      const testResultCross = JSON.stringify(Array(3).fill(this.PARAMS.cross));
+  #resultFieldGame(x: number[]): string {
+    const resultFieldGame = JSON.stringify([
+      this.gameField[x[0]],
+      this.gameField[x[1]],
+      this.gameField[x[2]],
+    ]);
 
-      if (testGridGame === testResultCircle) {
-        this.gameStatus = 'gameOver'
-        this.title = 'Упс...'
-        this.text = "Проиграли кажется!"
-        
-        return
+    return resultFieldGame;
+  }
+
+  #checkGameStatus(): void {
+    WIN_ARRAY.forEach((x: number[]) => {
+      const resultFieldGame = this.#resultFieldGame(x);
+
+      if (resultFieldGame === this.winResultCircle) {
+        this.gameInfo = GAME_INFO[0];
+        return;
       }
 
-      if (testGridGame === testResultCross) {
-        this.gameStatus = 'win'
-        this.title = 'Уоу...'
-        this.text = "Поздравляю, вы победили!"
-        
-        return
+      if (resultFieldGame === this.winResultCross) {
+        this.gameInfo = GAME_INFO[1];
+        return;
       }
 
-      if (this.gameList.every((x) => x !== null)) {
-        this.gameStatus = 'standoff'
-        this.title = 'Ничья...'
-        this.text = "Пробуем еще разок..."
-        
-        return 
+      if (this.gameField.every(Boolean)) {
+        this.gameInfo = GAME_INFO[2];
+        return;
       }
     });
-  };
+  }
 }
