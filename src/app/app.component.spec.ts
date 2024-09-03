@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { GameComponent } from './components/game';
+import { ModalComponent } from './components/modal';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [AppComponent, GameComponent, ModalComponent],
     }).compileComponents();
   });
 
@@ -14,16 +16,18 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'tik-tak-toe' title`, () => {
+  it(`should have the 'Крестики нолики' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('tik-tak-toe');
+    expect(app.title).toEqual('Крестики нолики');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, tik-tak-toe');
+    expect(compiled.querySelector('h1')?.textContent).toContain(
+      'Крестики нолики'
+    );
   });
 });
