@@ -12,9 +12,7 @@ import { GameService } from '../../services/game';
 export class GameComponent {
   readonly #gameService = inject(GameService);
 
-  get gameList(): (string | null)[] {
-    return this.#gameService.gameField;
-  }
+  readonly $gameField = this.#gameService.$gameField;
 
   updatePersonItem(index: number): void {
     this.#gameService.updatePersonItem(index);
