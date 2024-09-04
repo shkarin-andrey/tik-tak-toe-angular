@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { GameService } from '../../services/game';
-import { GameStatusType } from '../../types';
 import { ButtonComponent } from '../button';
 
 @Component({
@@ -13,17 +12,7 @@ import { ButtonComponent } from '../button';
 export class ModalComponent {
   readonly #gameService = inject(GameService);
 
-  get $title(): string {
-    return this.#gameService.gameInfo?.title ?? '';
-  }
-
-  get $description(): string {
-    return this.#gameService.gameInfo?.description ?? '';
-  }
-
-  get $gameStatus(): GameStatusType | null {
-    return this.#gameService.gameInfo?.status ?? null;
-  }
+  readonly $gameInfo = this.#gameService.$gameInfo;
 
   close(): void {
     this.#gameService.reset();
