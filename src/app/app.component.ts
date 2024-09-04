@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { GameComponent } from './components/game';
 import { ModalComponent } from './components/modal';
 import { GameService } from './services/game';
-import { GameStatusType } from './types';
 
 @Component({
   selector: 'app-root',
@@ -15,9 +14,7 @@ import { GameStatusType } from './types';
 export class AppComponent {
   readonly #gameService = inject(GameService);
 
-  get gameStatus(): GameStatusType | null {
-    return this.#gameService.gameInfo?.status ?? null;
-  }
+  readonly $gameInfo = this.#gameService.$gameInfo;
 
   readonly title: string = 'Крестики нолики';
 }

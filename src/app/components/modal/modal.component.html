@@ -1,7 +1,11 @@
+@if ($gameInfo(); as gameInfo) {
 <div class="modal">
   <div class="modal-content">
-    <h2 class="modal-title">{{ $title }}</h2>
-    <p class="modal-description">{{ $description }}</p>
+    <h2 class="modal-title">{{ gameInfo.title }}</h2>
+
+    <p class="modal-description">{{ gameInfo.description }}</p>
+
     <app-button (click)="close()">Закрыть</app-button>
   </div>
 </div>
+}
